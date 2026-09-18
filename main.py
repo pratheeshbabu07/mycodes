@@ -13,7 +13,31 @@ import pandas as pd
 from fastapi import FastAPI
 from fastapi.responses import HTMLResponse, RedirectResponse
 
-DATA_FILE = Path(__file__).parent / "data" / "skin_clinic_campaign.csv"
+HERE = Path(__file__).parent
+
+# Accept the CSV either in data/ or sitting next to main.py: GitHub's web
+# uploader silently drops subfolders, so the flat layout is a common accident.
+CANDIDATE_PATHS = [
+    HERE / "data" / "skin_clinic_campaign.csv",
+    HERE / "skin_clinic_campaign.csv",
+    HERE / "data" / "skin clinic campaign.csv",
+    HERE / "skin clinic campaign.csv",
+]
+
+
+def locate_data_file() -> Path:
+    for path in CANDIDATE_PATHS:
+        if path.is_file():
+            return path
+    looked = "\n  ".join(str(p) for p in CANDIDATE_PATHS)
+    present = sorted(p.name for p in HERE.iterdir())
+    raise FileNotFoundError(
+        f"Campaign CSV not found. Looked in:\n  {looked}\n"
+        f"Files actually present in {HERE}: {present}"
+    )
+
+
+DATA_FILE = locate_data_file()
 
 # Display order for the segments, so the tables always read low -> high.
 AGE_ORDER = ["<30", "30-50", ">50"]
@@ -30,6 +54,7 @@ app = FastAPI(
 # Loaded once at start-up: the file is static, so re-reading it per request
 # would only add latency.
 df = pd.read_csv(DATA_FILE)
+print(f"Loaded {len(df):,} rows from {DATA_FILE}")
 
 
 def categorize_products(num_products: int) -> str:
