@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nifty 50 Open Direction Predictor</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b0b0b'/%3E%3Cpath d='M16 8l7 12H9z' fill='%230ca30c'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+<div class="wrap">
+
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo" aria-hidden="true">N50</span>
+      <div class="brand-text">
+        <h1>Nifty 50 open direction predictor</h1>
+        <p class="lede">Logistic regression served by FastAPI — this page is a client of that API</p>
+      </div>
+    </div>
+
+    <div class="statusbar">
+      <div class="item"><span class="k">Model</span><span class="v" id="st-model">checking…</span></div>
+      <div class="item"><span class="k">Features</span><span class="v" id="st-features">—</span></div>
+      <div class="item"><span class="k">Today</span><span class="v" id="st-today">—</span></div>
+      <div class="item"><span class="k">Market</span><span class="v" id="st-market">—</span></div>
+      <div class="item"><span class="k">Week</span><span class="v" id="st-week">—</span></div>
+    </div>
+  </header>
+
+  <section class="card">
+    <div class="toolbar">
+      <button id="btn-week">Run this week&rsquo;s prediction</button>
+      <span class="note" id="week-note">
+        Predicts every session Monday to Friday and redraws the chart.
+        Calls <code>POST /predict/week</code>.
+      </span>
+    </div>
+
+    <div class="split">
+
+      <div class="empty" id="empty">
+        <span class="empty-mark" aria-hidden="true">▲</span>
+        <p>Run the prediction to see this week&rsquo;s chart and session table.</p>
+      </div>
+
+      <figure class="chart hidden" id="week-chart">
+        <img id="week-img" alt="Bar chart of the predicted probability of an up open for each session this week">
+      </figure>
+
+      <div class="side">
+
+        <div class="hero hidden" id="hero">
+          <div class="hero-head">
+            <span class="k" id="hero-label">Next session</span>
+            <span class="hero-date" id="hero-date">—</span>
+          </div>
+          <div class="hero-main">
+            <div>
+              <div class="figure" id="hero-prob">—</div>
+              <div class="figure-sub">probability of an up open</div>
+            </div>
+            <div class="hero-right">
+              <div id="hero-dir"></div>
+              <div class="figure-sub">predicted class <span id="hero-class">—</span></div>
+            </div>
+          </div>
+          <div class="meter">
+            <div class="fill" id="hero-meter"></div>
+            <div class="tick" title="0.50 decision threshold"></div>
+          </div>
+          <div class="meter-scale"><span>0.00</span><span>0.50 threshold</span><span>1.00</span></div>
+        </div>
+
+        <div class="tablewrap hidden" id="week-tablewrap">
+          <table>
+            <caption class="sr-only">Predicted open direction for each session this week</caption>
+            <thead>
+              <tr>
+                <th scope="col">Date</th>
+                <th scope="col">Day</th>
+                <th scope="col">Horizon</th>
+                <th scope="col" class="num">Predicted probability</th>
+                <th scope="col" class="num">Predicted class</th>
+                <th scope="col">Nifty 50 open direction</th>
+              </tr>
+            </thead>
+            <tbody id="week-rows"></tbody>
+          </table>
+        </div>
+
+      </div>
+    </div>
+
+    <p class="note hidden" id="week-download"></p>
+  </section>
+
+  <footer>
+    <span class="foot-label">API</span>
+    <code>GET /health</code> <code>POST /predict</code> <code>POST /predict/batch</code>
+    <code>GET /datasets</code> <code>POST /datasets/upload</code> <code>POST /predict/file</code>
+    <code>POST /predict/week</code> <code>GET /outputs/{name}</code> <code>GET /chart/week.png</code>
+    <a href="/docs">Interactive docs →</a>
+  </footer>
+
+</div>
+<script src="/static/app.js"></script>
+</body>
+</html>

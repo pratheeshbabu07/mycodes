@@ -1,0 +1,341 @@
+/* Nifty 50 predictor - page styles.
+   Ink and direction tokens match week_chart.py so the page and the chart read as one
+   thing; the page ground is its own pale blue wash, the chart keeps its own surface.
+   Laid out to keep the button, chart and table together on one screen: the chart
+   takes the wide column, the hero figure and table share the narrow one. */
+
+:root {
+  --surface:      #ffffff;   /* card surface */
+  --surface-sunk: #f6f8fc;   /* wells inside a card */
+  --plane:        #eef3fa;   /* flat light blue, where a solid is needed */
+  --plane-top:    #e8eff9;   /* page wash, top */
+  --plane-mid:    #f2f6fc;
+  --plane-bottom: #f8fafd;   /* page wash, bottom */
+  --ink:          #0b0b0b;
+  --ink-soft:     #52514e;
+  /* Darkened from #898781, which only reached 3.3:1 on the page ground. This
+     token carries nearly all the small text, so it has to clear WCAG AA 4.5:1. */
+  --ink-muted:    #6e6a65;
+  /* Cool neutrals, so the rules and wells sit on the blue wash without going muddy. */
+  --hairline:     #e4e8f0;
+  --baseline:     #c4ccd9;
+
+  /* Direction. Green/red separate poorly under deutan (measured delta-E 4.1), so
+     direction is ALWAYS carried by a triangle and the word as well as the hue. */
+  --up:           #0ca30c;
+  --up-wash:      #eaf6ea;
+  --down:         #d03b3b;
+  --down-wash:    #fbeced;
+
+  --radius:    10px;
+  --radius-sm: 6px;
+
+  --shadow-card: 0 1px 2px rgba(23, 33, 54, 0.05), 0 1px 3px rgba(23, 33, 54, 0.05);
+  --shadow-key:  0 1px 2px rgba(23, 33, 54, 0.18);
+
+  --sans: "Segoe UI Variable Text", "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+/* A pale blue wash, fading toward near-white at the foot of the page. Fixed, so it
+   stays put rather than scrolling with the content; min-height keeps it covering the
+   viewport when the content is short. */
+body {
+  margin: 0;
+  min-height: 100vh;
+  padding: 22px 20px 26px;
+  background: linear-gradient(180deg,
+              var(--plane-top) 0%, var(--plane-mid) 45%, var(--plane-bottom) 100%);
+  background-attachment: fixed;
+  color: var(--ink);
+  font: 14px/1.55 var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.wrap { max-width: 1320px; margin: 0 auto; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* --- top bar ------------------------------------------------------------- */
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 14px 28px;
+  padding: 13px 18px;
+  margin-bottom: 14px;
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+}
+
+.brand { display: flex; align-items: center; gap: 13px; min-width: 0; }
+
+.logo {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px; height: 38px;
+  border-radius: 9px;
+  background: var(--ink);
+  color: #fff;
+  font-size: 12px; font-weight: 600; letter-spacing: 0.02em;
+}
+
+.brand-text h1 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+}
+
+.brand-text .lede {
+  margin: 1px 0 0;
+  color: var(--ink-muted);
+  font-size: 12.5px;
+}
+
+/* Status items, separated by hairline rules rather than boxes. */
+.statusbar { display: flex; flex-wrap: wrap; align-items: stretch; gap: 0; }
+
+.statusbar .item {
+  display: flex; flex-direction: column; gap: 1px;
+  padding: 0 16px;
+  border-left: 1px solid var(--hairline);
+}
+.statusbar .item:first-child { border-left: 0; }
+.statusbar .item:last-child { padding-right: 0; }
+
+.statusbar .k {
+  font-size: 10px; font-weight: 600; color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.statusbar .v { font-size: 13px; font-weight: 500; white-space: nowrap; }
+
+.dot {
+  display: inline-block; width: 7px; height: 7px;
+  border-radius: 50%; margin-right: 6px; vertical-align: 1px;
+}
+.dot.ok  { background: var(--up); }
+.dot.bad { background: var(--down); }
+
+/* --- card ---------------------------------------------------------------- */
+
+section.card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 16px 18px 18px;
+}
+
+.toolbar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* --- controls ------------------------------------------------------------ */
+
+button {
+  font: inherit;
+  font-weight: 500;
+  padding: 9px 17px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: #fff;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--shadow-key);
+  transition: background 120ms ease, transform 120ms ease;
+}
+button:hover:not(:disabled) { background: #2b2b28; border-color: #2b2b28; }
+button:active:not(:disabled) { transform: translateY(1px); }
+button:disabled { opacity: 0.45; cursor: progress; box-shadow: none; }
+
+:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; border-radius: 3px; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+
+.note { color: var(--ink-muted); font-size: 12.5px; }
+.note.error { color: var(--down); }
+.note code, footer code {
+  font-family: ui-monospace, "Cascadia Mono", Consolas, monospace;
+  font-size: 11.5px;
+  background: var(--surface-sunk);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 5px;
+}
+
+/* --- chart + side column ------------------------------------------------- */
+
+/* The chart takes the wider column; the hero figure and table stack beside it, so
+   all three are above the fold. Below 1020px there is no room - they stack. */
+.split {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+  gap: 18px 22px;
+  align-items: start;
+  margin-top: 16px;
+}
+
+@media (max-width: 1020px) {
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .statusbar .item { padding-left: 0; border-left: 0; padding-right: 18px; }
+}
+
+.chart { margin: 0; }
+.chart img {
+  max-width: 100%; height: auto; display: block;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+}
+
+.side { display: flex; flex-direction: column; gap: 16px; min-width: 0; }
+
+/* Placeholder before the first run, so the card is never an empty box. */
+.empty {
+  grid-column: 1 / -1;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px;
+  min-height: 260px;
+  border: 1px dashed var(--baseline);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunk);
+  color: var(--ink-muted);
+}
+.empty p { margin: 0; font-size: 13px; }
+.empty-mark { font-size: 17px; color: var(--baseline); }
+
+/* --- hero figure --------------------------------------------------------- */
+
+.hero {
+  padding: 14px 16px 16px;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunk);
+}
+
+.hero-head {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 10px;
+  margin-bottom: 6px;
+}
+.hero-head .k {
+  font-size: 10px; font-weight: 600; color: var(--ink-muted);
+  text-transform: uppercase; letter-spacing: 0.06em;
+}
+.hero-date { font-size: 13px; font-weight: 600; }
+
+.hero-main {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  gap: 14px; margin-bottom: 14px;
+}
+.hero-right { text-align: right; }
+
+/* Hero number: proportional figures, not tabular - tabular looks loose this big. */
+.hero .figure {
+  font-size: 46px; font-weight: 600; line-height: 1;
+  letter-spacing: -0.025em;
+}
+.hero .figure-sub { font-size: 11.5px; color: var(--ink-muted); margin-top: 4px; }
+
+/* Probability meter - mirrors the chart's 0.50 threshold line. */
+.meter {
+  position: relative; height: 8px;
+  border-radius: 4px;
+  background: var(--hairline);
+}
+.meter .fill { height: 100%; border-radius: 4px; background: var(--ink-muted); }
+.meter .fill.up   { background: var(--up); }
+.meter .fill.down { background: var(--down); }
+.meter .tick {
+  position: absolute; left: 50%; top: -3px; bottom: -3px;
+  width: 1px; background: var(--ink-soft);
+}
+.meter-scale {
+  display: flex; justify-content: space-between;
+  font-size: 10.5px; color: var(--ink-muted); margin-top: 6px;
+}
+
+/* --- table --------------------------------------------------------------- */
+
+.tablewrap { overflow-x: auto; }
+
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+
+thead th {
+  text-align: left;
+  font-size: 10px; font-weight: 600;
+  color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 0 10px 7px 0;
+  border-bottom: 1px solid var(--baseline);
+  vertical-align: bottom;
+}
+tbody td {
+  padding: 7px 10px 7px 0;
+  border-bottom: 1px solid var(--hairline);
+  vertical-align: middle;
+  white-space: nowrap;
+}
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--surface-sunk); }
+td.num, th.num { font-variant-numeric: tabular-nums; }
+tbody tr.traded td { color: var(--ink-soft); }
+
+.horizon {
+  display: inline-block;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase;
+  padding: 2px 7px; border-radius: 999px;
+  background: var(--plane); border: 1px solid var(--hairline); color: var(--ink-muted);
+  white-space: nowrap;
+}
+.horizon.forecast { background: var(--surface); border-color: var(--ink-soft); color: var(--ink); }
+
+/* --- direction marks ----------------------------------------------------- */
+
+/* Triangle carries direction as a SHAPE, the word carries it as text; the hue is
+   the third and least reliable channel. Never hue alone. */
+.dir { display: inline-flex; align-items: center; gap: 5px; white-space: nowrap; font-weight: 500; }
+.dir .mark { font-size: 10px; line-height: 1; }
+.dir.up   .mark { color: var(--up); }
+.dir.down .mark { color: var(--down); }
+
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 13px; border-radius: 999px;
+  font-weight: 600; font-size: 15px;
+}
+.chip.up   { background: var(--up-wash);   border: 1px solid var(--up);   color: #096b09; }
+.chip.down { background: var(--down-wash); border: 1px solid var(--down); color: #932525; }
+.chip .mark { font-size: 11px; }
+
+/* --- misc ---------------------------------------------------------------- */
+
+.hidden { display: none !important; }
+
+a { color: var(--ink); text-underline-offset: 2px; }
+
+#week-download { margin: 14px 0 0; }
+
+footer {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 6px 7px;
+  margin-top: 16px;
+  color: var(--ink-muted); font-size: 11.5px;
+}
+.foot-label {
+  font-size: 10px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: 0.06em;
+  margin-right: 2px;
+}
+footer a { margin-left: 4px; font-weight: 500; }
